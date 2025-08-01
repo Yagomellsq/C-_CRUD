@@ -6,11 +6,13 @@ public partial class Form1 : Form
 {
     private readonly TextBox _nomeBox;
     private readonly TextBox _emailBox;
+    private readonly TextBox _senhaBox;
     private readonly TextBox _telefoneBox;
     private readonly Button _addButton;
     private readonly Button _editButton;
     private readonly Button _deleteButton;
     private readonly Button _readButton;
+    private readonly Button _loginButton;
     public Form1()
     {
         InitializeComponent();
@@ -40,23 +42,36 @@ public partial class Form1 : Form
             Location = new Point(10, 100),
             Size = new Size(200, 15)
         };
-        
+
         var myLabel3 = new Label
         {
-            Text = "Telefone:",
+            Text = "Senha:",
             Location = new Point(10, 130),
+            Size = new Size(100, 15)
+        };
+
+        _senhaBox = new TextBox
+        {
+            Location = new Point(10, 170),
+            Size = new Size(200, 15)
+        };
+        
+        var myLabel4 = new Label
+        {
+            Text = "Telefone:",
+            Location = new Point(10, 200),
             Size = new Size(100, 15)
         };
 
         _telefoneBox = new TextBox
         {
-            Location = new Point(10, 170),
+            Location = new Point(10, 230),
             Size = new Size(200, 15)
         };
 
         _addButton = new Button
         {
-            Location = new Point(10, 230),
+            Location = new Point(10, 270),
             Size = new Size(150, 30),
             Text = "Add"
         };
@@ -64,7 +79,7 @@ public partial class Form1 : Form
 
         _editButton = new Button
         {
-            Location = new Point(10, 300),
+            Location = new Point(10, 330),
             Size = new Size(150, 30),
             Text = "Edit",
         };
@@ -72,7 +87,7 @@ public partial class Form1 : Form
 
         _readButton = new Button
         {
-            Location = new Point(200, 230),
+            Location = new Point(200, 270),
             Size = new Size(150, 30),
             Text = "Read"
         };
@@ -80,23 +95,31 @@ public partial class Form1 : Form
         
         _deleteButton = new Button
         {
-            Location = new Point(200, 300),
+            Location = new Point(200, 330),
             Size = new Size(150, 30),
             Text = "Delete"
         };
         _deleteButton.Click += myButton4_Click;
 
-        Controls.AddRange(new System.Windows.Forms.Control[] {myLabel, _nomeBox, myLabel2, _emailBox, myLabel3, _telefoneBox, _addButton, _editButton, _deleteButton, _readButton});
+        _loginButton = new Button
+        {
+            Location = new Point(390, 270),
+            Size = new Size(150, 30),
+            Text = "Login"
+        };
+        _loginButton.Click += myButton5_Click;
+
+        Controls.AddRange(new System.Windows.Forms.Control[] {myLabel, _nomeBox, myLabel2, _emailBox, myLabel3, _senhaBox, myLabel4, _telefoneBox, _addButton, _editButton, _deleteButton, _readButton, _loginButton});
     }
 
     private void myButton_Click(object? sender, EventArgs e)
     {
-        if (_nomeBox.Text == "" || _emailBox.Text == "" || _telefoneBox.Text == "")
+        if (_nomeBox.Text == "" || _emailBox.Text == "" || _senhaBox.Text == "" || _telefoneBox.Text == "")
         {
             MessageBox.Show("Nenhum dos campos podem ser nulos");
             return;
         }
-        var control = new Control.Control().AdicionarCliente(_nomeBox.Text, _emailBox.Text, _telefoneBox.Text);
+        var control = new Control.Control().AdicionarCliente(_nomeBox.Text, _emailBox.Text, _senhaBox.Text, _telefoneBox.Text);
         if (control != null)
         {
             MessageBox.Show("Cliente adicionado com sucesso");
@@ -107,13 +130,13 @@ public partial class Form1 : Form
 
     private void myButton2_Click(object? sender, EventArgs e)
     {
-        if (_nomeBox.Text == "" || _emailBox.Text == "" || _telefoneBox.Text == "")
+        if (_nomeBox.Text == "" || _emailBox.Text == "" || _senhaBox.Text == "" || _telefoneBox.Text == "")
         {
             MessageBox.Show("Nenhum dos campos podem ser nulos");
             return;
         }
         
-        var control = new Control.Control().AlterarCliente(int.Parse(Interaction.InputBox("Id do cliente", "ID input")), _nomeBox.Text, _emailBox.Text, _telefoneBox.Text);
+        var control = new Control.Control().AlterarCliente(int.Parse(Interaction.InputBox("Id do cliente", "ID input")), _nomeBox.Text, _emailBox.Text, _senhaBox.Text, _telefoneBox.Text);
         if (control != null)
         {
             MessageBox.Show("Cliente alterado com sucesso");
@@ -142,5 +165,19 @@ public partial class Form1 : Form
             return;
         }
         MessageBox.Show("Error ao deletar o cliente");
+    }
+
+    private void myButton5_Click(object? sender, EventArgs e)
+    {
+        if (_emailBox.Text == "" || _senhaBox.Text == "")
+        {
+            MessageBox.Show("Email ou senha não podem ser nulos");
+            return;
+        }
+        MessageBox.Show(
+            new Control.Control().VerificarLogin(_emailBox.Text, _senhaBox.Text)
+            ? "Login realizado com sucesso"
+            : "Email ou senha incorretos"
+        );
     }
 }
