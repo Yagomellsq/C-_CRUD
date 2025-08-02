@@ -33,7 +33,7 @@ public class Control
 
         if (clienteDto != null)
         {
-            clienteDto.Senha = Cryptography.Cryptography.Descriptografar(clienteDto.Senha);
+            clienteDto.Senha = clienteDto.Senha != null ? Cryptography.Cryptography.Descriptografar(clienteDto.Senha) : null;
         }
         return clienteDto;
     }
@@ -55,7 +55,7 @@ public class Control
     public Cliente? AlterarCliente(int id, string nome, string email, string senha, string telefone)
     {
         _context = new Crud();
-        var cliente = _context.Cliente.Find(id);
+        var cliente = id != 0 ? _context.Cliente.Find(id) : null;
         if (cliente == null)
         {
             return null;

@@ -109,75 +109,78 @@ public partial class Form1 : Form
         };
         _loginButton.Click += myButton5_Click;
 
-        Controls.AddRange(new System.Windows.Forms.Control[] {myLabel, _nomeBox, myLabel2, _emailBox, myLabel3, _senhaBox, myLabel4, _telefoneBox, _addButton, _editButton, _deleteButton, _readButton, _loginButton});
+        Controls.AddRange(new System.Windows.Forms.Control[] {
+            myLabel,
+            _nomeBox,
+            myLabel2,
+            _emailBox,
+            myLabel3,
+            _senhaBox,
+            myLabel4,
+            _telefoneBox,
+            _addButton,
+            _editButton,
+            _deleteButton,
+            _readButton,
+            _loginButton
+        });
     }
 
     private void myButton_Click(object? sender, EventArgs e)
     {
-        if (_nomeBox.Text == "" || _emailBox.Text == "" || _senhaBox.Text == "" || _telefoneBox.Text == "")
-        {
-            MessageBox.Show("Nenhum dos campos podem ser nulos");
-            return;
-        }
-        var control = new Control.Control().AdicionarCliente(_nomeBox.Text, _emailBox.Text, _senhaBox.Text, _telefoneBox.Text);
-        if (control != null)
-        {
-            MessageBox.Show("Cliente adicionado com sucesso");
-            return;
-        }
-        MessageBox.Show("Error ao adicionar o cliente");
+        MessageBox.Show(_nomeBox.Text == "" || _emailBox.Text == "" || _senhaBox.Text == "" || _telefoneBox.Text == "" ?
+            "Nenhum dos campos podem ser nulos" :
+            new Control.Control().AdicionarCliente(_nomeBox.Text, _emailBox.Text, _senhaBox.Text, _telefoneBox.Text) != null ?
+                "Cliente adicionado com sucesso" :
+                "Error ao adicionar o cliente");
     }
 
     private void myButton2_Click(object? sender, EventArgs e)
     {
-        if (_nomeBox.Text == "" || _emailBox.Text == "" || _senhaBox.Text == "" || _telefoneBox.Text == "")
+        var input = Interaction.InputBox("Id do cliente", "ID do cliente");
+        if (!int.TryParse(input, out var id))
         {
-            MessageBox.Show("Nenhum dos campos podem ser nulos");
+            MessageBox.Show("O valor digitado não é um digito ou é abaixo de 0");
             return;
         }
-        
-        var control = new Control.Control().AlterarCliente(int.Parse(Interaction.InputBox("Id do cliente", "ID input")), _nomeBox.Text, _emailBox.Text, _senhaBox.Text, _telefoneBox.Text);
-        if (control != null)
-        {
-            MessageBox.Show("Cliente alterado com sucesso");
-            return;
-        }
-        MessageBox.Show("Error ao alterar o cliente");
+        MessageBox.Show(_nomeBox.Text == "" || _emailBox.Text == "" || _senhaBox.Text == "" || _telefoneBox.Text == "" ?
+            "Nenhum dos campos podem ser nulos" :
+            new Control.Control().AlterarCliente(id, _nomeBox.Text, _emailBox.Text, _senhaBox.Text, _telefoneBox.Text) != null ?
+                "Cliente alterado com sucesso" : "Error ao alterar o cliente");
     }
 
     private static void myButton3_Click(object? sender, EventArgs e)
     {
-        var control = new Control.Control().BuscarCliente(int.Parse(Interaction.InputBox("Id do cliente", "ID input")));
-        if (control != null)
+        var input = Interaction.InputBox("Id do cliente", "ID input");
+        if (!int.TryParse(input, out var id) || id <= 0)
         {
-            MessageBox.Show(control.ToString());
+            MessageBox.Show("O valor digitado não é um digito ou é abaixo de 0");
             return;
         }
-        MessageBox.Show("Error ao encontrar o cliente");
+        var cliente = new Control.Control().BuscarCliente(id);
+        MessageBox.Show(cliente != null ?
+            cliente.ToString() :
+            "Error ao encontrar o cliente");
     }
 
     private static void myButton4_Click(object? sender, EventArgs e)
     {
-        var control = new Control.Control().RemoverCliente(int.Parse(Interaction.InputBox("Id do cliente", "ID input")));
-        if (control != null)
+        var input = Interaction.InputBox("Id do cliente", "ID input");
+        if (!int.TryParse(input, out var id) || id <= 0)
         {
-            MessageBox.Show("Cliente deletado com sucesso");
+            MessageBox.Show("O valor digitado não é um digito ou é abaixo de 0");
             return;
         }
-        MessageBox.Show("Error ao deletar o cliente");
+        var cliente = new Control.Control().RemoverCliente(id);
+        MessageBox.Show(cliente != null ?
+            "Cliente deletado com sucesso" : "Error ao deletar o cliente");
     }
 
     private void myButton5_Click(object? sender, EventArgs e)
     {
-        if (_emailBox.Text == "" || _senhaBox.Text == "")
-        {
-            MessageBox.Show("Email ou senha não podem ser nulos");
-            return;
-        }
-        MessageBox.Show(
-            new Control.Control().VerificarLogin(_emailBox.Text, _senhaBox.Text)
-            ? "Login realizado com sucesso"
-            : "Email ou senha incorretos"
-        );
+        MessageBox.Show(_emailBox.Text == "" || _senhaBox.Text == "" ?
+            "Email ou senha não podem ser nulos" :
+            new Control.Control().VerificarLogin(_emailBox.Text, _senhaBox.Text) ?
+                "Login realizado com sucesso" : "Email ou senha incorretos");
     }
 }
